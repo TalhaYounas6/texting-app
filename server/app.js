@@ -1,9 +1,10 @@
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
+import cookieParser from "cookie-parser";
 // import { clerkMiddleware, requireAuth } from "@clerk/express";
 import connectCloudinary from "./config/cloudinary.js";
-import routes from "./routes/index.js"
+import routes from "./routes/index.js";
 
 
 const app = express();
@@ -25,6 +26,7 @@ connectionToCloudinary();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 // app.use(clerkMiddleware());
 
 app.get("/", (req, res) => {

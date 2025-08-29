@@ -14,3 +14,7 @@ export const generateJWT = (userID,res)=>{
     return token;
 
 }
+
+export const verifyJWT = async(token)=>{
+    return token;
+}

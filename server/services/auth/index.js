@@ -39,5 +39,52 @@ export const signup = asyncHandler(async(req,res)=>{
 
 
 export const login = asyncHandler(async(req,res)=>{
-    
+    const {password,email} = req.body;
+
+    const user = await User.findOne({where:{email},raw : true});
+
+    if(!user){
+        return res.status(STATUS_CODES.NOT_FOUND).json({
+            statusCode : STATUS_CODES.NOT_FOUND,
+            message : "User does not exist",
+        })
+    }
+
+    const isPassword = await bcrypt.compare(password,user?.password)
+
+    if(!isPassword){
+        res.status(STATUS_CODES.UNAUTHORIZED).json({
+            statusCode : STATUS_CODES.UNAUTHORIZED,
+            message: "Inavlid credentials",
+        })
+    }
+
+    let token = generateJWT(user.id,res);
+
+    res.status(STATUS_CODES.SUCCESS).json({
+        statusCode : STATUS_CODES.SUCCESS,
+        message : TEXTS.LOGIN,
+        data : user,
+    })
+
+
+
 })
+
+export const logout = asyncHandler(async(req,res)=>{
+    res.cookie("jwt","",{
+        maxAge: 0,
+        httpOnly:true,
+        sameSite: "strict",
+        secure: process.env.NODE_ENV != "development"
+    })
+
+    res.status(STATUS_CODES.SUCCESS).json({
+        statusCode: STATUS_CODES.SUCCESS,
+        message : "User logged out",
+    })
+})
+
+export const updateProfile = async(req,res)=>{
+
+}

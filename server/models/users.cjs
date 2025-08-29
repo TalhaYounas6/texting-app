@@ -37,10 +37,6 @@ module.exports = (sequelize, DataTypes) => {
         type: Sequelize.STRING,
         defaultValue: "",
       },
-      last_seen: {
-        type: Sequelize.DATE,
-        allowNull: true,
-      },
     },
     {
       sequelize,

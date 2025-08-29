@@ -13,7 +13,7 @@ const app = express();
 async function connectionToCloudinary(){
     try {
       await connectCloudinary();
-      console.log("Connectin to cloudinary successful");
+      console.log("Connection to cloudinary successful");
     } catch (error) {
         console.log("Error in connection to cloudinary: ",error);
         process.exit(1);

@@ -26,7 +26,7 @@ export const signup = asyncHandler(async(req,res)=>{
     const newUser = await User.findByPk(data.id,{raw : true});
 
     if(newUser){
-        let token = generateJWT(newUser.id,res)
+        let token = generateJWT(newUser.id,res);
     }
 
     res.status(STATUS_CODES.SUCCESS).json({
@@ -34,6 +34,7 @@ export const signup = asyncHandler(async(req,res)=>{
         message : TEXTS.CREATED,
         data
     })
+    
 
 })
 
@@ -67,6 +68,7 @@ export const login = asyncHandler(async(req,res)=>{
         data : user,
     })
 
+   
 
 
 })
@@ -83,8 +85,51 @@ export const logout = asyncHandler(async(req,res)=>{
         statusCode: STATUS_CODES.SUCCESS,
         message : "User logged out",
     })
+
+    
 })
 
-export const updateProfile = async(req,res)=>{
+export const updateProfile = asyncHandler(async(req,res)=>{
 
-}
+    const image = req.file;
+
+    const userId = req.user.id;
+
+    if(!image){
+        return res.status(STATUS_CODES.REQUIRED).json({
+            statusCode : STATUS_CODES.REQUIRED,
+            message : "Profile image is required"
+        })
+    }
+
+    const base64Image = `data:${image.mimetype};base64,${image.buffer.toString(
+    "base64"
+    )}`;
+    const uploadresponse = await cloudinary.uploader.upload(base64Image);
+
+    await User.update(
+        {profilePic : uploadresponse.secure_url},
+        {
+            where : {id : userId}
+        },
+    );
+
+    const userData = User.findByPk(userId);
+    res.status(STATUS_CODES.SUCCESS).json({
+        statusCode: STATUS_CODES.SUCCESS,
+        message : "Profile Image Updated",
+        data : userData,
+    })
+})
+
+export const checkAuth = asyncHandler(async(req,res)=>{
+    
+    const user = await User.findByPk(req.user?.id);
+
+    res.status(STATUS_CODES.SUCCESS).json({
+        statusCode:STATUS_CODES.SUCCESS,
+        message : TEXTS.VERIFIED,
+        data : user
+    })
+
+})

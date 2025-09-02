@@ -16,5 +16,11 @@ export const generateJWT = (userID,res)=>{
 }
 
 export const verifyJWT = async(token)=>{
-    return token;
+    try {
+     const decoded =  jwt.verify(token,process.env.jwtSecretKey);
+     return {decoded, err:null}
+        
+    } catch (error) {
+        return {decoded:null, err:error}
+    }
 }

@@ -9,7 +9,7 @@ export const protectedRoute = async(req,res,next)=>{
     try {
         
         const token = req.cookies.jwt;
-    
+        
         if(!token){
             return res.status(STATUS_CODES.UNAUTHORIZED).json({
                 statusCode : STATUS_CODES.UNAUTHORIZED,
@@ -17,25 +17,26 @@ export const protectedRoute = async(req,res,next)=>{
             })
         }
     
-        const decoded = await verifyJWT(token);
-        if(decoded.err){
+        const result = await verifyJWT(token);
+        if(result.err){
             return res.status(STATUS_CODES.UNAUTHORIZED).json({
                 statusCode : STATUS_CODES.UNAUTHORIZED,
                 message : TEXTS.INVALID_AUTH_TOKEN,
             })
         } else{
-            const user = await User.findByPK(decoded.id,{
+            const user = await User.findByPk(result.decoded.userID,{
                 attributes : {
                     exclude: ["password"]
                 }
             });
     
             req.user = user;
+            console.log(user);
             next();
         }
     } catch (error) {
         console.log("Error in protectedRoute middleware: ",error);
-        res.statusCode(STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+        res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({
             statusCode : STATUS_CODES.INTERNAL_SERVER_ERROR,
             message : "Internal Servor Error"
         })

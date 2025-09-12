@@ -5,8 +5,8 @@ import {protectedRoute} from "../../middlewares/auth.middleware.js"
 
 const router = express.Router();
 
-router.get('/users',protectedRoute,messageServices.getUsersFromSidebar)
-
+router.get('/users',protectedRoute,messageServices.getUsersFromSidebar);
+router.get('/:id',protectedRoute,messageServices.getMessagesFromPerson);
 
 
 export default router;

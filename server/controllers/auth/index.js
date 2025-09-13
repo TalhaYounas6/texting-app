@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/auth/signup',validateInput(userSchema),authServices.signup);
 router.post('/auth/login',authServices.login);
 router.post('/auth/logout',authServices.logout)
-router.put('/auth/updateProfile',protectedRoute,authServices.updateProfile)
+router.put('/auth/updateProfile',protectedRoute,upload.single('image'),authServices.updateProfile)
 router.get('/auth/check',protectedRoute,authServices.checkAuth)
 
 export default router;

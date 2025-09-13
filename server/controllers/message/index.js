@@ -8,5 +8,6 @@ const router = express.Router();
 router.get('/users',protectedRoute,messageServices.getUsersFromSidebar);
 router.get('/:id',protectedRoute,messageServices.getMessagesFromPerson);
 
+router.post('/send/:id',protectedRoute,upload.single('image'),messageServices.sendMessages);
 
 export default router;

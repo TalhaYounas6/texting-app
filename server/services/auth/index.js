@@ -5,6 +5,7 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const {User} = require("../../models/index.cjs");
 import {generateJWT} from "../../utils/jwtToken.js"
+const cloudinary = require("cloudinary").v2;
 // import { json } from "sequelize";
 
 export const signup = asyncHandler(async(req,res)=>{
@@ -107,18 +108,20 @@ export const updateProfile = asyncHandler(async(req,res)=>{
     )}`;
     const uploadresponse = await cloudinary.uploader.upload(base64Image);
 
-    await User.update(
+    const [affectedCount, updatedUser] = await User.update(
         {profilePic : uploadresponse.secure_url},
         {
-            where : {id : userId}
+            where : {id : userId},
+            returning : true,
+            plain : true,
         },
     );
 
-    const userData = User.findByPk(userId);
+    // const userData = User.findByPk(userId);
     res.status(STATUS_CODES.SUCCESS).json({
         statusCode: STATUS_CODES.SUCCESS,
         message : "Profile Image Updated",
-        data : userData,
+        data : updatedUser,
     })
 })
 

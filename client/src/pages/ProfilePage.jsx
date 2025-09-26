@@ -13,7 +13,7 @@ const ProfilePage = () => {
     const url = URL.createObjectURL(file);
 
     const formData = new FormData();
-    formData.append("image",url);
+    formData.append("image",file);
     setSelectedImg(url);
     
     await updateProfile(formData);
@@ -68,7 +68,7 @@ const ProfilePage = () => {
                 <User className="w-4 h-4" />
                 Full Name
               </div>
-              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">{authUser.data?.fullName}</p>
+              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">{authUser.data?.name}</p>
             </div>
 
             <div className="space-y-1.5">

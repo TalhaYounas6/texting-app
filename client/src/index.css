@@ -1,8 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-@import "tailwindcss";
-@plugin "daisyui";
 
 ::-webkit-scrollbar {
   width: 12px;

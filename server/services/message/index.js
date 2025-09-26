@@ -3,13 +3,14 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const {User,Message} = require("../../models/index.cjs");
 const {Op} = require("sequelize");
-import {TEXTS,STATUS_CODES} from "../../config/constants.js"
+import {TEXTS,STATUS_CODES} from "../../config/constants.js";
+const cloudinary = require("cloudinary").v2;
 
 
 export const getUsersFromSidebar = asyncHandler(async(req,res)=>{
     const loggedInUser = req.user.id;
 
-    const users = User.findAll({
+    const users = await User.findAll({
         where: {
             id: {
                 [Op.ne] : loggedInUser,
@@ -63,6 +64,8 @@ export const sendMessages = asyncHandler(async(req,res)=>{
     const senderId = req.user.id;
     const { text } = req.body;
 
+    
+
     if(!text && !image){
         return res.status(STATUS_CODES.REQUIRED).json({
             statusCode : STATUS_CODES.REQUIRED,
@@ -81,7 +84,7 @@ export const sendMessages = asyncHandler(async(req,res)=>{
 
     const message = await Message.create({
         senderId : senderId,
-        receiverId : receiverId,
+        recieverId : receiverId,
         text,
         image : imgUrl,
     })

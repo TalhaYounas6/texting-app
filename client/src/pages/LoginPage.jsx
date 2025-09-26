@@ -3,6 +3,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import AuthImagePattern from "../components/AuthImagePattern";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare } from "lucide-react";
+import {toast} from "react-hot-toast";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -10,12 +11,42 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-  const { login, isLoggingIn } = useAuthStore();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    login(formData);
+  const { login, isLoggingIn } = useAuthStore();
+  
+  const validateForm = () => {
+    const errors = [];
+
+    if (!formData.email.trim()){
+        errors.push("Email is required");
+       
+    }
+    if (!/\S+@\S+\.\S+/.test(formData.email)){
+       errors.push("Invalid email format");
+       
+    } 
+    if (!formData.password){
+       errors.push("Password is required");
+        
+    }
+   
+    errors.forEach((err)=>toast.error(err));
+
+    return errors.length === 0;
   };
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const success = validateForm();
+
+    if (success) {
+      login(formData);
+    }
+  };
+
+  
 
   return (
     <div className="h-screen grid lg:grid-cols-2">

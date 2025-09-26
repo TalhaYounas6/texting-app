@@ -37,10 +37,12 @@ const Navbar = () => {
                   <span className="hidden sm:inline">Profile</span>
                 </Link>
 
-                <button className="flex gap-2 items-center" onClick={logout}>
-                  <LogOut className="size-5" />
-                  <span className="hidden sm:inline">Logout</span>
-                </button>
+                {/* <Link to="/login"> */}
+                  <button className="flex gap-2 items-center cursor-pointer bg-red-800 rounded-lg p-2" onClick={logout}>
+                    <LogOut className="size-5" />
+                    <span className="hidden sm:inline">Logout</span>
+                  </button>
+                {/* </Link> */}
               </>
             )}
           </div>

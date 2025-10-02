@@ -55,22 +55,20 @@ export const login = asyncHandler(async(req,res)=>{
     const isPassword = await bcrypt.compare(password,user?.password)
 
     if(!isPassword){
-        res.status(STATUS_CODES.UNAUTHORIZED).json({
+        return res.status(STATUS_CODES.UNAUTHORIZED).json({
             statusCode : STATUS_CODES.UNAUTHORIZED,
             message: "Inavlid credentials",
         })
     }
 
     let token = generateJWT(user.id,res);
+    console.log("Token in logen service: ",token);
 
     res.status(STATUS_CODES.SUCCESS).json({
         statusCode : STATUS_CODES.SUCCESS,
         message : TEXTS.LOGIN,
         data : user,
     })
-
-   
-
 
 })
 
@@ -79,7 +77,7 @@ export const logout = asyncHandler(async(req,res)=>{
         maxAge: 0,
         httpOnly:true,
         sameSite: "strict",
-        secure: process.env.NODE_ENV != "development"
+        secure: true
     })
 
     res.status(STATUS_CODES.SUCCESS).json({

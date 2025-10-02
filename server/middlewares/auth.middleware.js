@@ -9,6 +9,7 @@ export const protectedRoute = async(req,res,next)=>{
     try {
         
         const token = req.cookies.jwt;
+        console.log("Token in protected route: ",token);
         
         if(!token){
             return res.status(STATUS_CODES.UNAUTHORIZED).json({

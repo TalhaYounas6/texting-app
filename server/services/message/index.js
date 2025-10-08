@@ -4,7 +4,9 @@ const require = createRequire(import.meta.url);
 const {User,Message} = require("../../models/index.cjs");
 const {Op} = require("sequelize");
 import {TEXTS,STATUS_CODES} from "../../config/constants.js";
+import { getReceiverSocketId,getIoInstance } from "../../socket/index.js";
 const cloudinary = require("cloudinary").v2;
+
 
 
 export const getUsersFromSidebar = asyncHandler(async(req,res)=>{
@@ -91,6 +93,11 @@ export const sendMessages = asyncHandler(async(req,res)=>{
 
     //socket.io implementation here for real time messaging
     //.....
+    const io = getIoInstance();
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if(receiverSocketId){
+        io.to(receiverSocketId).emit("newMessage",message) 
+    }
 
     res.status(STATUS_CODES.SUCCESS).json({
         statusCode : STATUS_CODES.SUCCESS,

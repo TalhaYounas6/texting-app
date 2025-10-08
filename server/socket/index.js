@@ -7,6 +7,10 @@ let io;
 
 let userSocketMap = {};
 
+export const getReceiverSocketId = (userId)=>{
+    return userSocketMap[userId];
+}
+
 const initializeSocket = (server)=>{
     io = new Server(server,{
         cors : {
@@ -32,6 +36,10 @@ const initializeSocket = (server)=>{
         io.emit("getOnlineUsers",Object.keys(userSocketMap));
     })
 })
+}
+
+export const getIoInstance = ()=>{
+    return io;
 }
 
 

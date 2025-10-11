@@ -25,7 +25,7 @@ connectionToCloudinary();
 
 
 app.use(cors({
-  origin: ['http://localhost:5173',"https://texting-app-ontb.onrender.com"],
+  origin: ['http://localhost:5173',"https://texting-app-production.up.railway.app"],
   credentials: true                
 }));
 app.use(express.json());

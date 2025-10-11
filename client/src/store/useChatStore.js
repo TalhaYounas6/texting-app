@@ -36,15 +36,16 @@ export const useChatStore = create((set,get)=>({
     },
 
     sendMessage : async(messageData) =>{
-       const {selectedUser} = get();
+       const {selectedUser,messages} = get();
         try {
             const res = await axiosInstance.post(`/send/${selectedUser.id}`,messageData,{
                 withCredentials:true,
                 headers:{"Content-Type":"multipart/form-data"}
             });
-            // set({messages : [...messages,res.data.data]});
+            // console.log(res);
+            set({messages : [...messages,res.data.data]});
         } catch (error) {
-            toast.error(error)
+            toast.error(error.toString());
 
             if(error.response){
                 console.error("Error in response: ",error.response.data.message)
@@ -63,6 +64,7 @@ export const useChatStore = create((set,get)=>({
         const socket  = useAuthStore.getState().socket;
         
         socket.on("newMessage",(message)=>{
+            const {selectedUser,messages} = get();
             const isMessageFromSelectedUser = message.senderId === selectedUser.id;
             if(!isMessageFromSelectedUser) return;
             set({messages : [...get().messages,message]});
@@ -70,10 +72,9 @@ export const useChatStore = create((set,get)=>({
     },
 
     unsubscribeFromMessages : ()=>{
+
         const socket = useAuthStore.getState().socket;
-        socket.off("newMessage",(message)=>{
-            set({messages : [...get().messages,message]})
-        })
+        socket.off("newMessage");
     },
 
     

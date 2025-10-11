@@ -7,7 +7,7 @@ let io;
 
 let userSocketMap = {};
 
-export const getReceiverSocketId = (userId)=>{
+export const getUserSocketId = (userId)=>{
     return userSocketMap[userId];
 }
 

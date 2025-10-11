@@ -25,7 +25,7 @@ const ChatContainer = () => {
 
     subscribeToMessages();
 
-    return ()=> unsubscribeFromMessages
+    return ()=> unsubscribeFromMessages();
 
   }, [selectedUser.id,getMessages,subscribeToMessages,unsubscribeFromMessages]);
 

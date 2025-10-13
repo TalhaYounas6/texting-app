@@ -42,6 +42,7 @@ const MessageInput = () => {
       // Clear form
       setText("");
       setImagePreview(null);
+      setPicFile(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
       console.error("Failed to send message:", error);
